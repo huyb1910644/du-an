@@ -18,10 +18,6 @@ exports.create = async (req, res, next) => {
     }
 }
 
-// exports.create = (req, res) => {
-//     return res.send({ message: 'create handler'})
-// }
-
 exports.findAll = async (req, res, next) => {
     let contacts = []
 
@@ -33,10 +29,11 @@ exports.findAll = async (req, res, next) => {
         } else {
             contacts = await contactService.all()
         }
-    } catch (error) {
+
+    } catch(error) {
         console.log(error)
         return next(
-            new ApiError( 500, 'An error occurred while retrieving contacts')
+            new ApiError(500, 'An error occurred while retrieving contacts')
         )
     }
 
@@ -51,7 +48,7 @@ exports.findOne = async (req, res, next) => {
             return next(new ApiError(404, 'Contact not found'))
         }
         return res.send(contact)
-    } catch (error) {
+    } catch(error) {
         console.log(error)
         return next(
             new ApiError(
@@ -63,7 +60,7 @@ exports.findOne = async (req, res, next) => {
 }
 
 exports.update = async (req, res, next) => {
-    if (Object.keys(req.body).length === 0){
+    if (Object.keys(req.body).length === 0) {
         return next(new ApiError(400, 'Data to update can not be empty'))
     }
 
@@ -73,8 +70,8 @@ exports.update = async (req, res, next) => {
         if (!updated) {
             return next(new ApiError(404, 'Contact not found'))
         }
-        return res.send({message: 'Contact was updated successfully'})
-    } catch (error) {
+        return res.send({ message: 'Contact was updated successfully' })
+    } catch(error) {
         console.log(error)
         return next(
             new ApiError(500, `Error updating contact with id=${req.params.id}`)
@@ -84,50 +81,48 @@ exports.update = async (req, res, next) => {
 
 exports.delete = async (req, res, next) => {
     try {
-        const contactService = new ContactService()
+        const contactService = new ContactService();
         const deleted = await contactService.delete(req.params.id)
-        if(!deleted){
+        if (!deleted) {
             return next(new ApiError(404, 'Contact not found'))
         }
-        return res.send({ message: 'Contact was deleted successfully'})
-    } catch (error) {
+        return res.send({ message: 'Contact was deleted successfully' })
+    } catch(error) {
         console.log(error)
         return next(
             new ApiError(
                 500,
-                `Could not delete contact with id=${req.params.id}`
+                `Could not deleted contact with id=${req.params.id}`
             )
         )
     }
 }
 
 exports.deleteAll = async (req, res, next) => {
-   try {
+    try {
         const contactService = new ContactService()
         const deleted = await contactService.deleteAll()
         return res.send({
             message: `${deleted} contacts were deleted successfully`
         })
-   } catch (error) {
+    } catch(error) {
         console.log(error)
         return next(
             new ApiError(500, 'An error occurred while removing all contacts')
         )
-   }
+    }
 }
 
 exports.findAllFavorite = async (req, res, next) => {
-   try {
+    try {
         const contactService = new ContactService()
         const contacts = await contactService.allFavorite()
         return res.send(contacts)
-   } catch (error) {
+    } catch(error) {
         console.log(error)
         return next(
-            new ApiError(
-                500,
-                'An error occurred while retrieving favorite contacts'
-            )
+            500,
+            'An error occurred while retrieving favorite contacts'
         )
-   }
+    }
 }
